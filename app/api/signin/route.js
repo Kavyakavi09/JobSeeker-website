@@ -6,6 +6,7 @@ import User from '@/models/user';
 export async function POST(req) {
   try {
     const { Email, password } = await req.json();
+    const secret = process.env.JWT_SECRET || 'fallback_secret_key';
 
     // Connect to the database
     await dbConnect();
@@ -30,7 +31,7 @@ export async function POST(req) {
     // Create JWT token
     const token = jwt.sign(
       { userId: user._id, Email: user.Email },
-      process.env.JWT_SECRET,
+      secret,
       { expiresIn: '1d' }
     );
 
